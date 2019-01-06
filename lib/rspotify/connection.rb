@@ -61,6 +61,7 @@ module RSpotify
 
       begin
         headers = get_headers(params)
+        headers['Authorization'] = "Bearer #{$token || @client_token}"
         headers['Accept-Language'] = ENV['ACCEPT_LANGUAGE'] if ENV['ACCEPT_LANGUAGE']
         response = RestClient.send(verb, url, *params)
       rescue RestClient::Unauthorized => e
@@ -71,7 +72,7 @@ module RSpotify
         authenticate(@client_id, @client_secret)
 
         headers = get_headers(params)
-        headers['Authorization'] = "Bearer #{@client_token}"
+        headers['Authorization'] = "Bearer #{$token || @client_token}"
 
         response = retry_connection(verb, url, params)
       end
